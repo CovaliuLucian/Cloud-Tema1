@@ -3,7 +3,7 @@ import socketserver
 
 from HttpHandler import HttpHandler
 
-PORT = 8080
+PORT = 55555
 Handler = HttpHandler
 
 with socketserver.TCPServer(("", PORT), Handler) as httpd:

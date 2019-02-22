@@ -1,38 +1,113 @@
+import json
+import sys
+from urllib import parse
 from http.server import BaseHTTPRequestHandler
 
 import requests
 
 
 class HttpHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/test':
-            r = requests.get("https://api.stackexchange.com/2.2/questions",
-                             params={"site": "stackoverflow", "pagesize": 1})
-            if r.status_code != 200:
-                print(r.status_code)
-                print(r.content)
-                return
-
-            title = r.json()["items"][0]["title"]
-
+    def do_POST(self):
+        if self.path == "/translate":
+            data = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+            lang = ""
+            if data.get("lang") is not None:
+                lang = "en-" + data["lang"]
+            text = ""
+            if data.get("text") is not None:
+                text = data["text"]
             r = requests.get("https://translate.yandex.net/api/v1.5/tr.json/translate",
-                             params={"text": title, "lang": "en-ro",
+                             params={"text": text, "lang": lang,
                                      "key": "trnsl.1.1.20190222T104030Z.8db7db72bc8fb757.9573c1028bc38bb4e7688c6c3730c7df14be2e4a"})
 
-            print(r.json())
-            title = ''.join(r.json()["text"])
+            if r.status_code != 200:
+                self.send_response(r.status_code)
+                self.send_header('Content-type', 'text-html')
+                self.end_headers()
+                self.wfile.write(r.content)
+                return
 
-            r = requests.get("https://qrng.anu.edu.au/API/jsonI.php", params={"length": 1, "type": "uint8"})
+            translated = ''.join(r.json()["text"])
+            self.send_response(200)
+
+            self.send_header('Content-type', 'text-html')
+            self.end_headers()
+
+            self.wfile.write(translated.encode())
+
+    def do_GET(self):
+        args = {}
+        idx = self.path.find('?')
+        if idx >= 0:
+            rpath = self.path[:idx]
+            args = parse.parse_qs(self.path[idx + 1:])
+        else:
+            rpath = self.path
+        # print(args)
+
+        result = ""
+
+        if rpath == '/se':
+            uri = "https://api.stackexchange.com/2.2/questions"
+            params = {"site": "stackoverflow", "pagesize": 1}
+            if args.get("id") is not None:
+                uri += '/' + args["id"][0]
+            r = requests.get(uri, params=params)
+
+            if r.status_code != 200:
+                self.send_response(r.status_code)
+                self.send_header('Content-type', 'text-html')
+                self.end_headers()
+                self.wfile.write(r.content)
+                return
+
+            json = r.json()
+            if len(json["items"]) == 0:
+                self.send_response(404)
+                self.send_header('Content-type', 'text-html')
+                self.end_headers()
+                return
+
+            title = json["items"][0]["title"]
+
+            self.send_response(200)
+
+            self.send_header('Content-type', 'text-html')
+            self.end_headers()
+
+            self.wfile.write(title.encode())
+            return
+
+        if rpath == '/random':
+            min = 0
+            max = 100000
+
+            try:
+                if args.get("min") is not None:
+                    min = int(args["min"][0])
+                if args.get("max") is not None:
+                    max = int(args["max"][0])
+
+                if min > max:
+                    raise ValueError("Min can not be bigger than max")
+
+            except:
+                self.send_response(400)
+                self.send_header('Content-type', 'text-html')
+                self.end_headers()
+                self.wfile.write(str(sys.exc_info()[1]).encode())
+                return
+
+            r = requests.get("https://qrng.anu.edu.au/API/jsonI.php", params={"length": 1, "type": "uint16"})
+
             number = r.json()["data"][0]
+            final = number % (max + 1 - min) + min
 
             # send code 200 response
             self.send_response(200)
 
-            # send header first
             self.send_header('Content-type', 'text-html')
             self.end_headers()
 
-            # send file content to client
-            self.wfile.write(title.encode())
-            self.wfile.write(str(number).encode())
+            self.wfile.write(str(final).encode())
             return
