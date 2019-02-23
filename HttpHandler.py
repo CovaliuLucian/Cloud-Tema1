@@ -13,6 +13,14 @@ from config import Config
 class HttpHandler(BaseHTTPRequestHandler):
     config = Config().data
 
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+
     def do_POST(self):
         self.db = Database()
         if self.path == "/translate":
@@ -30,6 +38,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             if r.status_code != 200:
                 self.send_response(r.status_code)
                 self.send_header('Content-type', 'text-html')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(r.content)
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"text": text, "lang": lang}))
@@ -38,15 +47,17 @@ class HttpHandler(BaseHTTPRequestHandler):
                 return
 
             translated = ''.join(r.json()["text"])
+            d = {"text": translated}
             self.send_response(200)
 
             self.send_header('Content-type', 'text-html')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
 
             log = Log(r.elapsed.total_seconds(), r.content, 1, str({"text": text, "lang": lang}))
             self.db.insert_translation(log)
 
-            self.wfile.write(translated.encode())
+            self.wfile.write(json.dumps(d).encode())
             self.db.conn.close()
             return
 
@@ -73,6 +84,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             if r.status_code != 200:
                 self.send_response(r.status_code)
                 self.send_header('Content-type', 'text-html')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(r.content)
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"site": "stackoverflow", "pagesize": 1}))
@@ -84,6 +96,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             if len(result["items"]) == 0:
                 self.send_response(404)
                 self.send_header('Content-type', 'text-html')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"site": "stackoverflow", "pagesize": 1}))
                 self.db.insert_se(log)
@@ -95,6 +108,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.send_response(200)
 
             self.send_header('Content-type', 'text-html')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
 
             log = Log(r.elapsed.total_seconds(), r.content, 1, str({"site": "stackoverflow", "pagesize": 1}))
@@ -122,6 +136,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             except:
                 self.send_response(400)
                 self.send_header('Content-type', 'text-html')
+                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(str(sys.exc_info()[1]).encode())
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"length": 1, "type": "uint16"}))
@@ -136,9 +151,10 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.send_response(200)
 
             self.send_header('Content-type', 'text-html')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
 
-            self.wfile.write(str(final).encode())
+            self.wfile.write(json.dumps({"number": final}).encode())
 
             log = Log(r.elapsed.total_seconds(), r.content, 1, str({"length": 1, "type": "uint16"}))
             self.db.insert_random(log)
@@ -149,6 +165,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.send_response(200)
 
             self.send_header('Content-type', 'text-html')
+            self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
 
             self.wfile.write(self.db.metrics().to_json().encode())
