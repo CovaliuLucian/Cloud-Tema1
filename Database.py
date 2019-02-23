@@ -8,7 +8,7 @@ class Database:
     config = Config().data
 
     def __init__(self):
-        self.conn = sqlite3.connect("CC.db")
+        self.conn = sqlite3.connect("CC.db", timeout=10)
         self.c = self.conn.cursor()
         try:
             self.c.execute(self.config["create_translation"])

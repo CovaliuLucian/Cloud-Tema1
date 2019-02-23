@@ -11,10 +11,10 @@ from config import Config
 
 
 class HttpHandler(BaseHTTPRequestHandler):
-    db = Database()
     config = Config().data
 
     def do_POST(self):
+        self.db = Database()
         if self.path == "/translate":
             data = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
             lang = ""
@@ -34,6 +34,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.wfile.write(r.content)
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"text": text, "lang": lang}))
                 self.db.insert_translation(log)
+                self.db.conn.close()
                 return
 
             translated = ''.join(r.json()["text"])
@@ -46,8 +47,11 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.db.insert_translation(log)
 
             self.wfile.write(translated.encode())
+            self.db.conn.close()
+            return
 
     def do_GET(self):
+        self.db = Database()
         args = {}
         idx = self.path.find('?')
         if idx >= 0:
@@ -73,6 +77,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.wfile.write(r.content)
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"site": "stackoverflow", "pagesize": 1}))
                 self.db.insert_se(log)
+                self.db.conn.close()
                 return
 
             result = r.json()
@@ -82,6 +87,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"site": "stackoverflow", "pagesize": 1}))
                 self.db.insert_se(log)
+                self.db.conn.close()
                 return
 
             title = result["items"][0]["title"]
@@ -95,6 +101,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.db.insert_se(log)
 
             self.wfile.write(title.encode())
+            self.db.conn.close()
             return
 
         if rpath == '/random':
@@ -119,6 +126,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.wfile.write(str(sys.exc_info()[1]).encode())
                 log = Log(r.elapsed.total_seconds(), r.content, 0, str({"length": 1, "type": "uint16"}))
                 self.db.insert_random(log)
+                self.db.conn.close()
                 return
 
             number = r.json()["data"][0]
@@ -134,6 +142,7 @@ class HttpHandler(BaseHTTPRequestHandler):
 
             log = Log(r.elapsed.total_seconds(), r.content, 1, str({"length": 1, "type": "uint16"}))
             self.db.insert_random(log)
+            self.db.conn.close()
             return
 
         if rpath == '/metrics':
@@ -143,5 +152,5 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
             self.wfile.write(self.db.metrics().to_json().encode())
-
+            self.db.conn.close()
             return
