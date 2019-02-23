@@ -73,8 +73,8 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.db.insert_se(log)
                 return
 
-            json = r.json()
-            if len(json["items"]) == 0:
+            result = r.json()
+            if len(result["items"]) == 0:
                 self.send_response(404)
                 self.send_header('Content-type', 'text-html')
                 self.end_headers()
@@ -82,7 +82,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.db.insert_se(log)
                 return
 
-            title = json["items"][0]["title"]
+            title = result["items"][0]["title"]
 
             self.send_response(200)
 
@@ -132,4 +132,14 @@ class HttpHandler(BaseHTTPRequestHandler):
 
             log = Log(r.elapsed.total_seconds(), r.content, 1, str({"length": 1, "type": "uint16"}))
             self.db.insert_random(log)
+            return
+
+        if rpath == '/metrics':
+            self.send_response(200)
+
+            self.send_header('Content-type', 'text-html')
+            self.end_headers()
+
+            self.wfile.write(self.db.metrics().to_json().encode())
+
             return
