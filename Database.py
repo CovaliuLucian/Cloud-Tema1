@@ -1,19 +1,19 @@
 import sqlite3
 
 from Metric import Metric, Metrics
+from config import Config
 
 
 class Database:
+    config = Config().data
+
     def __init__(self):
         self.conn = sqlite3.connect("CC.db")
         self.c = self.conn.cursor()
         try:
-            self.c.execute(
-                '''CREATE TABLE LOGTRANSLATION(id TEXT , latency integer , response TEXT, success integer, request TEXT, time DATE )''')
-            self.c.execute(
-                '''CREATE TABLE LOGRANDOM(id TEXT , latency integer , response TEXT, success integer, request TEXT, time DATE )''')
-            self.c.execute(
-                '''CREATE TABLE LOGSE(id TEXT , latency integer , response TEXT, success integer, request TEXT, time DATE )''')
+            self.c.execute(self.config["create_translation"])
+            self.c.execute(self.config["create_random"])
+            self.c.execute(self.config["create_se"])
             self.conn.commit()
         except sqlite3.OperationalError:
             pass

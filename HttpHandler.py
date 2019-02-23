@@ -7,10 +7,12 @@ import requests
 
 from Database import Database
 from Log import Log
+from config import Config
 
 
 class HttpHandler(BaseHTTPRequestHandler):
     db = Database()
+    config = Config().data
 
     def do_POST(self):
         if self.path == "/translate":
@@ -23,7 +25,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 text = data["text"]
             r = requests.get("https://translate.yandex.net/api/v1.5/tr.json/translate",
                              params={"text": text, "lang": lang,
-                                     "key": "trnsl.1.1.20190222T104030Z.8db7db72bc8fb757.9573c1028bc38bb4e7688c6c3730c7df14be2e4a"})
+                                     "key": self.config["access_key"]})
 
             if r.status_code != 200:
                 self.send_response(r.status_code)
