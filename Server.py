@@ -1,9 +1,9 @@
-import http.server
 import socketserver
 
 from HttpHandler import HttpHandler
+from config import Config
 
-PORT = 55555
+PORT = Config().data["port"]
 Handler = HttpHandler
 
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
