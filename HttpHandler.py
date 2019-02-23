@@ -5,8 +5,13 @@ from http.server import BaseHTTPRequestHandler
 
 import requests
 
+from Database import Database
+from Log import Log
+
 
 class HttpHandler(BaseHTTPRequestHandler):
+    db = Database()
+
     def do_POST(self):
         if self.path == "/translate":
             data = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
@@ -25,6 +30,8 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text-html')
                 self.end_headers()
                 self.wfile.write(r.content)
+                log = Log(r.elapsed.total_seconds(), r.content, 0, str({"text": text, "lang": lang}))
+                self.db.insert_translation(log)
                 return
 
             translated = ''.join(r.json()["text"])
@@ -32,6 +39,9 @@ class HttpHandler(BaseHTTPRequestHandler):
 
             self.send_header('Content-type', 'text-html')
             self.end_headers()
+
+            log = Log(r.elapsed.total_seconds(), r.content, 1, str({"text": text, "lang": lang}))
+            self.db.insert_translation(log)
 
             self.wfile.write(translated.encode())
 
@@ -59,6 +69,8 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text-html')
                 self.end_headers()
                 self.wfile.write(r.content)
+                log = Log(r.elapsed.total_seconds(), r.content, 0, str({"site": "stackoverflow", "pagesize": 1}))
+                self.db.insert_se(log)
                 return
 
             json = r.json()
@@ -66,6 +78,8 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.send_response(404)
                 self.send_header('Content-type', 'text-html')
                 self.end_headers()
+                log = Log(r.elapsed.total_seconds(), r.content, 0, str({"site": "stackoverflow", "pagesize": 1}))
+                self.db.insert_se(log)
                 return
 
             title = json["items"][0]["title"]
@@ -75,12 +89,17 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text-html')
             self.end_headers()
 
+            log = Log(r.elapsed.total_seconds(), r.content, 1, str({"site": "stackoverflow", "pagesize": 1}))
+            self.db.insert_se(log)
+
             self.wfile.write(title.encode())
             return
 
         if rpath == '/random':
             min = 0
             max = 100000
+
+            r = requests.get("https://qrng.anu.edu.au/API/jsonI.php", params={"length": 1, "type": "uint16"})
 
             try:
                 if args.get("min") is not None:
@@ -96,9 +115,9 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text-html')
                 self.end_headers()
                 self.wfile.write(str(sys.exc_info()[1]).encode())
+                log = Log(r.elapsed.total_seconds(), r.content, 0, str({"length": 1, "type": "uint16"}))
+                self.db.insert_random(log)
                 return
-
-            r = requests.get("https://qrng.anu.edu.au/API/jsonI.php", params={"length": 1, "type": "uint16"})
 
             number = r.json()["data"][0]
             final = number % (max + 1 - min) + min
@@ -110,4 +129,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
             self.wfile.write(str(final).encode())
+
+            log = Log(r.elapsed.total_seconds(), r.content, 1, str({"length": 1, "type": "uint16"}))
+            self.db.insert_random(log)
             return
