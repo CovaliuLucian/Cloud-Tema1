@@ -114,7 +114,7 @@ class HttpHandler(BaseHTTPRequestHandler):
             log = Log(r.elapsed.total_seconds(), r.content, 1, str({"site": "stackoverflow", "pagesize": 1}))
             self.db.insert_se(log)
 
-            self.wfile.write(title.encode())
+            self.wfile.write(json.dumps({"title":title}).encode())
             self.db.conn.close()
             return
 
