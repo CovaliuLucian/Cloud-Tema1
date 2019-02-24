@@ -11,6 +11,7 @@ import { MetricsComponent } from './metrics/metrics.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { BlankComponent } from './blank/blank.component';
 import { HttpClientModule } from '@angular/common/http';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 
 @NgModule({
   declarations: [
@@ -20,13 +21,14 @@ import { HttpClientModule } from '@angular/common/http';
     SeComponent,
     MetricsComponent,
     PageNotFoundComponent,
-    BlankComponent
+    BlankComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AlertModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    Ng2GoogleChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

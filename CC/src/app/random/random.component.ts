@@ -24,7 +24,6 @@ export class RandomComponent implements OnInit {
       }, error => {
         console.log(JSON.stringify(error))
       }
-
     )
 
   }
