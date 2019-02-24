@@ -17,21 +17,21 @@ export class MetricsComponent implements OnInit {
     chartType: 'PieChart',
     dataTable: [],
     opt_firstRowIsData: true,
-    options: { 'title': 'Random' },
+    options: { title: 'Random' },
   };
 
   public pieChartT: GoogleChartInterface = {
     chartType: 'PieChart',
     dataTable: [],
     opt_firstRowIsData: true,
-    options: { 'title': 'Translation' },
+    options: { title: 'Translation' },
   };
 
   public pieChartSE: GoogleChartInterface = {
     chartType: 'PieChart',
     dataTable: [],
     opt_firstRowIsData: true,
-    options: { 'title': 'StackExchange' },
+    options: { title: 'StackExchange', },
   };
 
   public columnChart: GoogleChartInterface = {
