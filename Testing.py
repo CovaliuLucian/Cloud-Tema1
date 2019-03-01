@@ -8,7 +8,7 @@ PORT = Config().data["port"]
 uri = "http://127.0.0.1:" + str(PORT)
 lang = ['ro', 'ru', 'en', 'fr', 'it']
 
-barrier = threading.Barrier(10)
+barrier = threading.Barrier(20)
 
 
 def random_word():
@@ -50,4 +50,6 @@ def thread_it(n, f):
 
 
 if __name__ == '__main__':
-    thread_it(50, test_se)
+    # thread_it(100, test_translation)
+    # thread_it(100, test_se)
+    thread_it(100, test_random)
