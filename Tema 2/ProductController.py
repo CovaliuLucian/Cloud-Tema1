@@ -15,3 +15,9 @@ class ProductController:
         if product is None:
             return Response(False, "Not found", 404)
         return Response(True, product)
+
+    def delete(self, id):
+        if self.repo.delete(id):
+            return Response(True, '')
+        else:
+            return Response(False, 'Not found', 404)

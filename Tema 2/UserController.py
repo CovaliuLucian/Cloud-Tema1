@@ -6,6 +6,8 @@ class UserController:
     def __init__(self):
         self.repo = Repository(User)
 
+    # GET ########################
+
     def get(self, id=None):
         if id is None:
             users = self.repo.get()
@@ -39,3 +41,10 @@ class UserController:
         if len(products) == 0:
             return Response(False, "Not found", 404)
         return Response(True, products[0])
+
+    # DELETE ########################
+    def delete(self, id):
+        user = self.repo.delete(id)
+        if not user:
+            return Response(False, "Not found", 404)
+        return Response(True, '')

@@ -9,7 +9,7 @@ Base = declarative_base()
 
 class Product(Base):
     __tablename__ = "products"
-    id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence('product_id_seq'), primary_key=True)
     price = Column(Integer)
     name = Column(String)
     order_id = Column(Integer, ForeignKey('orders.id'))
@@ -28,7 +28,7 @@ class Order(Base):
     recv_date = Column(Date)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User", back_populates="orders")
-    products = relationship("Product", order_by=Product.order_id, back_populates="order")
+    products = relationship("Product", order_by=Product.order_id, back_populates="order", cascade="all, delete")
 
     def __repr__(self):
         return "<User(id='%s', cost='%i', place_date='%s', recv_date='%s', user_id='%i')>" % (
@@ -41,7 +41,7 @@ class User(Base):
     username = Column(String)
     fullname = Column(String)
     address = Column(String)
-    orders = relationship("Order", order_by=Order.id, back_populates="user")
+    orders = relationship("Order", order_by=Order.id, back_populates="user", cascade="all, delete")
 
     def __repr__(self):
         return "<User(id='%s', username='%s', fullname='%s', address='%s')>" % (
@@ -98,4 +98,6 @@ if __name__ == "__main__":
     test_user.orders.append(test_order)
     repo.create(test_user)
     repo2.create(test_product_free)
+
+    print(repo2.get(6))
     # repo.update()
