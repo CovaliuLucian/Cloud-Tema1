@@ -53,6 +53,13 @@ class HttpHandler(BaseHTTPRequestHandler):
 
         print(resp.to_json())
 
+        if not resp.success:
+            self.send_response(resp.error)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(resp.data.encode())
+            return
+
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
