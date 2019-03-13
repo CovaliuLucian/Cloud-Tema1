@@ -1,61 +1,60 @@
+import json
 import re
 from http.server import BaseHTTPRequestHandler
 
 from Config import Config
 from Util import Utilities
+from Database import Repository, User
+from UserController import UserController
+from ProductController import ProductController
+from Response import Response
 
 
 class HttpHandler(BaseHTTPRequestHandler):
-    config = Config().data
+    user_controller = UserController()
+    product_controller = ProductController()
 
     def do_OPTIONS(self):
         self.send_response(200, "ok")
         self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS, POST, PUT, PATCH, DELETE')
         self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
 
     def do_GET(self):
         rpath, args = Utilities.get_args(self.path)
-        if re.match('^/users', rpath):
-            # /users
-            if re.match('^/users/?$', rpath, re.IGNORECASE):
-                print("all users")
-            else:
-                user_search = re.search('^/users/([a-z0-9]+)/?$', rpath, re.IGNORECASE)
-                if user_search:
-                    user_id = user_search.group(1)
-                    print("one user", user_id)
-                else:
-                    user_search = re.search('^/users/([a-z0-9]+)/orders/?$', rpath, re.IGNORECASE)
-                    if user_search:
-                        user_id = user_search.group(1)
-                        print("all orders", user_id)
-                    else:
-                        order_search = re.search('^/users/([a-z0-9]+)/orders/([a-z0-9]+)/?$', rpath, re.IGNORECASE)
-                        if order_search:
-                            user_id = order_search.group(1)
-                            order_id = order_search.group(2)
-                            print("id order", user_id, order_id)
-                        else:
-                            order_search = re.match('^/users/([a-z0-9]+)/orders/([a-z0-9]+)/products/?$', rpath,
-                                                    re.IGNORECASE)
-                            if order_search:
-                                user_id = order_search.group(1)
-                                order_id = order_search.group(2)
-                                print("all products", user_id, order_id)
-                            else:
-                                product_search = re.search(
-                                    '^/users/([a-z0-9]+)/orders/([a-z0-9]+)/products/([a-z0-9]+)/?$',
-                                    rpath, re.IGNORECASE)
-                                if product_search:
-                                    user_id = product_search.group(1)
-                                    order_id = product_search.group(2)
-                                    product_id = product_search.group(3)
-                                    print("id product", user_id, order_id, product_id)
-                                else:
-                                    print("bad")
+        resp = Response(False, "Not found", 404)
+        components = rpath.split("/")
+        components = list(filter(lambda a: a != "", components))
+        if components[0] == "users":
+            if len(components) == 1:
+                resp = self.user_controller.get()
+            if len(components) == 2:
+                resp = self.user_controller.get(components[1])
+            if len(components) > 2 and components[2] == "orders":
+                user_id = components[1]
+                if len(components) == 3:
+                    resp = self.user_controller.get_order(user_id)
+                if len(components) == 4:
+                    resp = self.user_controller.get_order(user_id, components[3])
+                if len(components) > 4 and components[4] == "products":
+                    order_id = components[3]
+                    if len(components) == 5:
+                        resp = self.user_controller.get_products(user_id, order_id)
+                    if len(components) == 6:
+                        resp = self.user_controller.get_products(user_id, order_id, components[5])
 
-        self.send_response(200, "ok")
+        if components[0] == "products":
+            if len(components) == 1:
+                resp = self.product_controller.get()
+            if len(components) == 2:
+                resp = self.product_controller.get(components[1])
+
+        print(resp.to_json())
+
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(resp.to_json())
         return
