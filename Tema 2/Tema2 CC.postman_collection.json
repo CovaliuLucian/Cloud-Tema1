@@ -1,0 +1,816 @@
+{
+	"info": {
+		"_postman_id": "d54b6c17-3297-413f-a4f9-4ef699afe811",
+		"name": "Tema2 CC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/1",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET user 404",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/9999",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/2",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"2"
+					]
+				},
+				"description": "# RUN POST USER BEFORE (or get a 404)"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE user 404",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/9999",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST user ID",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"adresa post\",\n    \"fullname\": \"full name post\",\n    \"username\": \"name post\"\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/2",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"2"
+					]
+				},
+				"description": "Delete before or get 409 conflict  \n\nRun once for 201 created, future runs will return 409 until deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "POST user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"adresa post\",\n    \"fullname\": \"full name post\",\n    \"username\": \"name post\"\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users"
+					]
+				},
+				"description": "Will choose an id for you"
+			},
+			"response": []
+		},
+		{
+			"name": "POST user bad request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"stuff\": \"that\",\n    \"is\": \"not\",\n    \"good\": 0\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/2",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT user",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"adresa put\",\n    \"fullname\": \"full name put\",\n    \"username\": \"name put\"\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/4",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT user 404",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"adresa put\",\n    \"fullname\": \"full name put\",\n    \"username\": \"name put\"\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/9999",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User not allowed",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "localhost:55555/users",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users"
+					]
+				},
+				"description": "Works with DELETE and PUT"
+			},
+			"response": []
+		},
+		{
+			"name": "GET order",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/10",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE order",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/13",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"13"
+					]
+				},
+				"description": "# RUN POST USER BEFORE (or get a 404)"
+			},
+			"response": []
+		},
+		{
+			"name": "POST order ID",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cost\": 5,\n    \"place_date\": \"2019-03-13\",\n    \"recv_date\": \"2019-03-14\"\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/13",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"13"
+					]
+				},
+				"description": "Delete before or get 409 conflict  \n\nRun once for 201 created, future runs will return 409 until deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT order",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cost\": 98761,\n    \"place_date\": \"2019-03-13\",\n    \"recv_date\": \"2019-03-14\"\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/13",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/11/products",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"11",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET product ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/11/products/5",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"11",
+						"products",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/11/products/6",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"11",
+						"products",
+						"6"
+					]
+				},
+				"description": "# RUN POST USER BEFORE (or get a 404)"
+			},
+			"response": []
+		},
+		{
+			"name": "POST product ID",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"name post\",\n    \"price\": 543\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/11/products/6",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"11",
+						"products",
+						"6"
+					]
+				},
+				"description": "Delete before or get 409 conflict  \n\nRun once for 201 created, future runs will return 409 until deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT product",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"name put\",\n    \"price\": 1236\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/11/products/6",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"11",
+						"products",
+						"6"
+					]
+				},
+				"description": "Delete before or get 409 conflict  \n\nRun once for 201 created, future runs will return 409 until deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all products alone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/products",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET product ID alone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/products/3",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"products",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE product  alone",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/products/3",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"products",
+						"3"
+					]
+				},
+				"description": "# RUN POST USER BEFORE (or get a 404)"
+			},
+			"response": []
+		},
+		{
+			"name": "POST product ID alone",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"name post\",\n    \"price\": 543\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/products/3",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"products",
+						"3"
+					]
+				},
+				"description": "Delete before or get 409 conflict  \n\nRun once for 201 created, future runs will return 409 until deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT product alone",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"name put\",\n    \"price\": 1236\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/products/3",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"products",
+						"3"
+					]
+				},
+				"description": "Delete before or get 409 conflict  \n\nRun once for 201 created, future runs will return 409 until deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "500",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "501",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/licenta",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"licenta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "503",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/serverulfacultatii",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"serverulfacultatii"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:55555/randomstuff",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"randomstuff"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -54,6 +54,12 @@ class HttpHandler(BaseHTTPRequestHandler):
                 if len(components) == 2:
                     resp = self.product_controller.get(components[1])
 
+            if components[0] == "serverulfacultatii":
+                resp = Response(False, "Service Unavailable", 503)
+
+            if components[0] == "licenta":
+                resp = Response(False, "Not Implemented", 501)
+
             print(resp.to_json())
 
             if not resp.success:
@@ -64,7 +70,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 return
 
             self.send_response(200)
-            self.send_header('Content-type', 'text/html')
+            self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(resp.to_json())
             return
@@ -113,12 +119,6 @@ class HttpHandler(BaseHTTPRequestHandler):
                 if len(components) == 2:
                     resp = self.product_controller.delete(components[1])
 
-            if components[0] == "serverulfacultatii":
-                resp = Response(False, "Service Unavailable", 503)
-
-            if components[0] == "licenta":
-                resp = Response(False, "Not Implemented", 501)
-
             print(resp.to_json())
 
             if not resp.success:
@@ -128,8 +128,8 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.wfile.write(resp.data.encode())
                 return
 
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
+            self.send_response(204)
+            self.send_header('Content-type', 'application/json')
             self.end_headers()
             # self.wfile.write(resp.to_json())
             return
@@ -188,7 +188,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 return
 
             self.send_response(201)
-            self.send_header('Content-type', 'text/html')
+            self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(resp.to_json())
             return
@@ -247,7 +247,7 @@ class HttpHandler(BaseHTTPRequestHandler):
                 return
 
             self.send_response(204)
-            self.send_header('Content-type', 'text/html')
+            self.send_header('Content-type', 'application/json')
             self.end_headers()
             # self.wfile.write(resp.to_json())
             return
