@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d54b6c17-3297-413f-a4f9-4ef699afe811",
+		"_postman_id": "7876a2db-0abb-4c11-aa57-34b7489839e5",
 		"name": "Tema2 CC",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -807,6 +807,38 @@
 					"port": "55555",
 					"path": [
 						"randomstuff"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "422",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cost\": 5,\n    \"place_date\": \"2019-03-13\",\n    \"recv_date\": \"2019-03-12\"\n}"
+				},
+				"url": {
+					"raw": "localhost:55555/users/6/orders/13",
+					"host": [
+						"localhost"
+					],
+					"port": "55555",
+					"path": [
+						"users",
+						"6",
+						"orders",
+						"13"
 					]
 				}
 			},

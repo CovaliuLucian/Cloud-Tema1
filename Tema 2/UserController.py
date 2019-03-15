@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 from Database import User, Repository, Order, Product
 from Response import Response
@@ -79,6 +80,10 @@ class UserController:
             new_order = Order._from_json(order)
         except Exception as e:
             return Response(False, "Invalid data: " + str(e), 400)
+        place_date = datetime.strptime(new_order.place_date, "%Y-%m-%d").date()
+        recv_date = datetime.strptime(new_order.recv_date, "%Y-%m-%d").date()
+        if recv_date < place_date:
+            return Response(False, "Unprocessable Entity", 422)
         if order_id is not None:
             new_order.id = order_id
         try:
@@ -133,6 +138,10 @@ class UserController:
         old_order.recv_date = new_order.recv_date
         old_order.place_date = new_order.place_date
         old_order.cost = new_order.cost
+        place_date = datetime.strptime(new_order.place_date, "%Y-%m-%d").date()
+        recv_date = datetime.strptime(new_order.recv_date, "%Y-%m-%d").date()
+        if recv_date < place_date:
+            return Response(False, "Unprocessable Entity", 422)
         self.repo_orders.update()
         return Response(True, '')
 
