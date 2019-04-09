@@ -1,0 +1,23 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+handlers:
+
+  - url: /
+    static_files: dist/front-t3/index.html
+    upload: dist/front-t3/index.html
+  - url: /
+    static_dir: dist/front-t3
+  - url: /index
+    static_files: dist/front-t3/index
+    upload: dist/front-t3/index
+
+skip_files:
+  - e2e/
+  - node_modules/
+  - src/
+  - ^(.*/)?\..*$
+  - ^(.*/)?.*\.json$
+  - ^(.*/)?.*\.md$
+  - ^(.*/)?.*\.yaml$
+  - ^LICENSE

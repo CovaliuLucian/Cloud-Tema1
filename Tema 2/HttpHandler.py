@@ -154,6 +154,10 @@ class HttpHandler(BaseHTTPRequestHandler):
                 resp = Response(False, "Invalid data: " + str(e), 400)
                 components[0] = ''  # don't @me
 
+            if self.headers['Content-type'] != 'application/json':
+                resp = Response(False, "Unsupported media type", 415)
+                components[0] = ''  # don't @me
+
             if components[0] == "users":
                 if len(components) == 1:
                     resp = self.user_controller.post(data)
